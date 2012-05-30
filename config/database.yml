@@ -38,5 +38,5 @@ production:
   database: simple_cms_production
   pool: 5
   username: root
-  password:
+  password: snooty
   socket: /tmp/mysql.sock

@@ -27,23 +27,53 @@ role :app, location
 role :web, location
 role :db,  location, :primary => true
 
-after "deploy:precompile"
+after 'deploy:update_code', 'deploy:symlink_db'
 
 namespace :deploy do
 
-  desc "Symlinks the database.yml"
-  task :symlink_db, :roles => :app do
-    run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
-  end
+# If you are using Passenger mod_rails uncomment this:
 
-  desc "run bundle install and ensure all gem requirements are met"
-  task :bundle do
-    run "cd #{current_path} && bundle install  --without=test"
-  end
+#   task :start do ; end
+#   task :stop do ; end
+#   task :restart, :roles => :app, :except => { :no_release => true } do
+#     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+#   end
+# end
+
+desc "Restart Application"
+task :restart, :roles => :app do
+  run "touch #{deploy_to}/#{shared_dir}/tmp/restart.txt"
+end
+
+desc "Symlinks the database.yml"
+task :symlink_db, :roles => :app do
+  run "ln -nfs #{deploy_to}/shared/config/database.yml
+  #{release_path}/config/database.yml"
+end
+
+
+# if you want to clean up old releases on each deploy uncomment this:
+# after "deploy:restart", "deploy:cleanup"
+
+# if you're still using the script/reaper helper you will need
+# these http://github.com/rails/irs_process_scripts
+
+
+after "deploy:restart", "deploy:precompile"
+
+namespace :deploy do
 
   desc "Compile assets"
   task :precompile, :roles => :app do
     run "cd #{release_path} && rake RAILS_ENV=#{rails_env} assets:precompile"
   end
+
+end
+
+
+
+
+
+
 
 end

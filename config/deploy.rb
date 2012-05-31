@@ -27,7 +27,7 @@ role :app, location
 role :web, location
 role :db,  location, :primary => true
 
-after "deploy:restart", "deploy:precompile"
+after "deploy:precompile"
 
 namespace :deploy do
 

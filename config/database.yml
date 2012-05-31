@@ -27,8 +27,7 @@ test:
   reconnect: false
   database: simple_cms_test
   pool: 5
-  username: 
-  password:
+  username: root
   socket: /tmp/mysql.sock
 
 production:

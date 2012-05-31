@@ -46,4 +46,4 @@ desc "Symlinks the database.yml"
   task :precompile, :roles => :app do
     run "cd #{release_path} && rake RAILS_ENV=#{rails_env} assets:precompile"
   end
-end
+

@@ -27,7 +27,7 @@ role :app, location
 role :web, location
 role :db,  location, :primary => true
 
-after 'deploy:update_code', 'deploy:symlink_db'
+after 'deploy:update_code', 'deploy:symlink_db', "deploy:restart", "deploy:precompile"
 
 namespace :deploy do
 
@@ -51,22 +51,19 @@ task :symlink_db, :roles => :app do
   #{release_path}/config/database.yml"
 end
 
+desc "Compile assets"
+  task :precompile, :roles => :app do
+    run "cd #{release_path} && rake RAILS_ENV=#{rails_env} assets:precompile"
+  end
 
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
 
 # if you're still using the script/reaper helper you will need
-# these http://github.com/rails/irs_process_scripts
+# these http://github.com/rails/irs_process_script
 
 
-after "deploy:restart", "deploy:precompile"
-
-namespace :deploy do
-
-  desc "Compile assets"
-  task :precompile, :roles => :app do
-    run "cd #{release_path} && rake RAILS_ENV=#{rails_env} assets:precompile"
-  end
+  
 
 end
 

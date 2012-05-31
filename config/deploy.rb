@@ -27,7 +27,7 @@ role :app, location
 role :web, location
 role :db,  location, :primary => true
 
-after 'deploy:update_code', 'deploy:symlink_db', "deploy:restart", "deploy:precompile"
+after 'deploy:update_code', 'deploy:symlink_db'
 
 namespace :deploy do
 

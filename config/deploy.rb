@@ -40,15 +40,15 @@ namespace :deploy do
 #   end
 # end
 
-desc "Restart Application"
-task :restart, :roles => :app do
-  run "touch #{deploy_to}/#{shared_dir}/tmp/restart.txt"
-end
-
 desc "Symlinks the database.yml"
 task :symlink_db, :roles => :app do
   run "ln -nfs #{deploy_to}/shared/config/database.yml
   #{release_path}/config/database.yml"
+end
+
+desc "Restart Application"
+task :restart, :roles => :app do
+  run "touch #{deploy_to}/#{shared_dir}/tmp/restart.txt"
 end
 
 desc "Compile assets"

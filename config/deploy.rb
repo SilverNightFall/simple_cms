@@ -27,19 +27,18 @@ role :app, location
 role :web, location
 role :db,  location, :primary => true
 
-after 'deploy:update_code', 'deploy:symlink_db', 'deploy:restart', 'deploy:precompile'
+after "deploy:restart", "deploy:precompile"
 
 namespace :deploy do
 
-
-desc "Restart Application"
-task :restart, :roles => :app do
-  run "touch #{deploy_to}/#{shared_dir}/tmp/restart.txt"
-end
-
-desc "Symlinks the database.yml"
+  desc "Symlinks the database.yml"
   task :symlink_db, :roles => :app do
     run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
+  end
+
+  desc "run bundle install and ensure all gem requirements are met"
+  task :bundle do
+    run "cd #{current_path} && bundle install  --without=test"
   end
 
   desc "Compile assets"
@@ -47,3 +46,4 @@ desc "Symlinks the database.yml"
     run "cd #{release_path} && rake RAILS_ENV=#{rails_env} assets:precompile"
   end
 
+end

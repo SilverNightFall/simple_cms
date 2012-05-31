@@ -37,6 +37,6 @@ production:
   reconnect: false
   database: simple_cms_production
   pool: 5
-  username: root
+  username: simple_cms
   password: snooty
-  socket: /tmp/mysql.sock
+  socket: /var/run/mysqld/mysqld.sock
